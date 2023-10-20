@@ -139,6 +139,7 @@ jobs:
 
           echo "TAGS=${TAGS[*]}" >> $GITHUB_ENV
           echo "TAGS_CONCAT=$(IFS=, ; echo "${TAGS[*]}")" >> $GITHUB_ENV
+          echo "BASE_TAG=pr${{ github.event.number }}-$(git rev-parse --short HEAD)-${{ matrix.coreos-version }}" >> $GITHUB_ENV
 
       - name: Login to GHCR
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3
