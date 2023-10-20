@@ -1,0 +1,8 @@
+ARG COREOS_VERSION=stable
+ARG COREOS_IMAGE=quay.io/fedora/fedora-coreos:${COREOS_VERSION}
+
+FROM ${COREOS_IMAGE} AS coreos
+
+RUN rpm-ostree install \
+  open-vm-tools \
+  qemu-guest-agent
