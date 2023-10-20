@@ -1,0 +1,21 @@
+ARG BASE_IMAGE=ghcr.io/rsturla/eternal-linux/server/base
+ARG BASE_TAG=stable
+
+# Build Firecracker Containerd
+FROM docker.io/golang:1.21-bookworm AS builder
+
+RUN git clone --recurse-submodules https://github.com/firecracker-microvm/firecracker-containerd /firecracker-containerd
+RUN cd /firecracker-containerd && \
+    make all
+
+RUN cd /firecracker-containerd && \
+    make firecracker
+
+FROM ${BASE_IMAGE}:${BASE_TAG} AS base
+
+COPY --from=builder /firecracker-containerd/runtime/containerd-shim-aws-firecracker /usr/local/bin/
+COPY --from=builder /firecracker-containerd/firecracker-control/cmd/containerd/firecracker-containerd /usr/local/bin/
+COPY --from=builder /firecracker-containerd/firecracker-control/cmd/containerd/firecracker-ctr /usr/local/bin/
+
+COPY --from=builder /firecracker-containerd/_submodules/firecracker/target/x86_64-unknown-linux-musl/release/firecracker /usr/local/bin/
+COPY --from=builder /firecracker-containerd/_submodules/firecracker/target/x86_64-unknown-linux-musl/release/jailer /usr/local/bin/
