@@ -82,7 +82,7 @@ jobs:
             COREOS_VERSION=${{ matrix.coreos-version }}
 
       - name: Sign Image
-        uses: ./.github/actions/sign-image
+        uses: rsturla/eternal-main/.github/actions/sign-image@main
         if: github.event_name != 'pull_request'
         with:
           registry: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
