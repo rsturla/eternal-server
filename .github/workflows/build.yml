@@ -75,7 +75,7 @@ jobs:
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5
         with:
           context: ${{ env.BUILD_CONTEXT_DIR }}
-          file: Containerfile
+          file: ${{ env.BUILD_CONTEXT_DIR }}/Containerfile
           push: true
           tags: ${{ env.TAGS_CONCAT }}
           build-args: |
